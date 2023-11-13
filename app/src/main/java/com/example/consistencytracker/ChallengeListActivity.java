@@ -22,6 +22,9 @@ import java.util.List;
 public class ChallengeListActivity extends AppCompatActivity {
     private ChallengeDataSource dataSource;
     private ChallengeAdapter adapter;
+    private static final int NAVIGATION_HOME = R.id.navigation_home;
+    private static final int NAVIGATION_ANOTHER_ITEM = R.id.navigation_another_item;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,28 +46,30 @@ public class ChallengeListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Implement logic to add a new challenge
                 addNewChallenge();
+                NumberPicker numberPickerChallengeDuration = findViewById(R.id.numberPickerChallengeDuration);
+                numberPickerChallengeDuration.setMinValue(1); // Set the minimum value
+                numberPickerChallengeDuration.setMaxValue(30); // Set the maximum value
+                numberPickerChallengeDuration.setValue(7);
             }
         });
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        /*BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int itemId = item.getItemId();
-                        switch (itemId) {
-                            case NAVIGATION_HOME:
-                                // Handle home button click
-                                Toast.makeText(ChallengeListActivity.this, "Home Clicked", Toast.LENGTH_SHORT).show();
-                                return true;
-                            case NAVIGATION_ANOTHER_ITEM:
-                                // Handle another item click
-                                // Add more cases for other navigation items as needed
-                                return true;
-                        }
-                        return false;
+                item -> {
+                    int itemId = item.getItemId();
+
+                    if (itemId == NAVIGATION_HOME) {
+                        // Handle home button click
+                        Toast.makeText(ChallengeListActivity.this, "Home Clicked", Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else if (itemId == NAVIGATION_ANOTHER_ITEM) {
+                        // Handle another item click
+                        // Add more else-if blocks for other navigation items as needed
+                        return true;
                     }
+
+                    return false;
                 }
-        );
+        );*/
     }
 
     private void addNewChallenge() {
@@ -81,13 +86,11 @@ public class ChallengeListActivity extends AppCompatActivity {
             return;
         }
 
-        // Create a new challenge
         Challenge newChallenge = new Challenge();
         newChallenge.setTitle(challengeName);
-        newChallenge.setDescription("Description goes here"); // You may add a description field in the layout
+        newChallenge.setDescription("Description");
         newChallenge.setDuration(duration);
 
-        // Insert the new challenge into the database
         long insertedId = dataSource.insertChallenge(newChallenge);
 
         if (insertedId != -1) {
@@ -100,7 +103,6 @@ public class ChallengeListActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to add challenge", Toast.LENGTH_SHORT).show();
         }
 
-        // Clear the EditText
         editTextChallengeName.getText().clear();
     }
 
