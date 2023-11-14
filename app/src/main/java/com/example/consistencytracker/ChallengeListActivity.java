@@ -69,7 +69,7 @@ public class ChallengeListActivity extends AppCompatActivity implements Challeng
                         startActivity(intentnav);
                         return true;
                     } else if (itemId == R.id.navigation_another_item) {
-                        Toast.makeText(this, "You can change me if you want", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "You can change me if you wantvé", Toast.LENGTH_SHORT).show();
                         return true;
                     }
 

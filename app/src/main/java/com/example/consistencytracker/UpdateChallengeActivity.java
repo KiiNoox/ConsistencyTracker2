@@ -67,14 +67,10 @@ public class UpdateChallengeActivity extends AppCompatActivity {
                     int itemId = item.getItemId();
 
                     if (itemId == R.id.navigation_home) {
-                        // Handle home button click
-                        // Start ChallengeListActivity
                         Intent intentnav = new Intent(this, ChallengeListActivity.class);
                         startActivity(intentnav);
                         return true;
                     } else if (itemId == R.id.navigation_another_item) {
-                        // Handle another item click
-                        // Add more else-if blocks for other navigation items as needed
                         return true;
                     }
 
@@ -98,8 +94,7 @@ public class UpdateChallengeActivity extends AppCompatActivity {
             Toast.makeText(this, "Failed to update challenge", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
         }
-
-        // Finish the activity after updating
+        
         finish();
     }
 
