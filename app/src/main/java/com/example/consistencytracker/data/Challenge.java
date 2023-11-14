@@ -1,5 +1,7 @@
 package com.example.consistencytracker.data;
 
+import android.os.Bundle;
+
 public class Challenge {
     private long id;
     private String title;
@@ -64,5 +66,21 @@ public class Challenge {
                 ", duration=" + duration +
                 '}';
     }
+    public static Bundle toBundle(Challenge challenge) {
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", challenge.getId());
+        bundle.putString("title", challenge.getTitle());
+        bundle.putString("description", challenge.getDescription());
+        bundle.putInt("duration", challenge.getDuration());
+        return bundle;
+    }
 
+    public static Challenge fromBundle(Bundle bundle) {
+        Challenge challenge = new Challenge();
+        challenge.setId(bundle.getLong("id"));
+        challenge.setTitle(bundle.getString("title"));
+        challenge.setDescription(bundle.getString("description"));
+        challenge.setDuration(bundle.getInt("duration"));
+        return challenge;
+    }
 }

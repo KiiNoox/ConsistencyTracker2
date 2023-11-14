@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.consistencytracker.data.Challenge;
 import com.example.consistencytracker.R;
+import com.example.consistencytracker.data.Challenge;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Chal
     public interface OnChallengeLongClickListener {
         void onChallengeLongClick(Challenge challenge);
     }
+
     public ChallengeAdapter(List<Challenge> challenges, OnChallengeLongClickListener longClickListener) {
         this.challenges = challenges;
         this.longClickListener = longClickListener;
@@ -43,6 +44,18 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Chal
         holder.descriptionTextView.setText(challenge.getDescription());
         holder.durationTextView.setText("Duration: " + challenge.getDuration() + " days");
 
+        // Set a long click listener on the item view
+        holder.itemView.setOnLongClickListener(v -> {
+            int adapterPosition = holder.getAdapterPosition();
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                Challenge longPressedChallenge = challenges.get(adapterPosition);
+                if (longClickListener != null) {
+                    longClickListener.onChallengeLongClick(longPressedChallenge);
+                }
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -50,40 +63,11 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Chal
         return challenges.size();
     }
 
-
     public void setChallenges(List<Challenge> newChallenges) {
         challenges = newChallenges;
         notifyDataSetChanged(); // Notify the adapter that the dataset has changed
     }
-    class ChallengeViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewChallengeTitle;
-        TextView descriptionTextView;
-        TextView durationTextView;
 
-
-        ChallengeViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textViewChallengeTitle = itemView.findViewById(R.id.textViewTitle);
-            descriptionTextView = itemView.findViewById(R.id.textViewDescription);
-            durationTextView = itemView.findViewById(R.id.textViewDuration);
-
-            // Set a long click listener on the item view
-            itemView.setOnLongClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Challenge challenge = challenges.get(position);
-                    if (longClickListener != null) {
-                        longClickListener.onChallengeLongClick(challenge);
-                    }
-                    return true; // Consume the long click event
-                }
-                return false;
-            });
-        }
-    void bind(Challenge challenge) {
-        textViewChallengeTitle.setText(challenge.getTitle());
-    }
-}
     public void removeChallenge(Challenge challenge) {
         int position = challenges.indexOf(challenge);
         if (position != -1) {
@@ -91,5 +75,21 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Chal
             notifyItemRemoved(position);
         }
     }
-}
 
+    class ChallengeViewHolder extends RecyclerView.ViewHolder {
+        private TextView textViewChallengeTitle;
+        TextView descriptionTextView;
+        TextView durationTextView;
+
+        ChallengeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewChallengeTitle = itemView.findViewById(R.id.textViewTitle);
+            descriptionTextView = itemView.findViewById(R.id.textViewDescription);
+            durationTextView = itemView.findViewById(R.id.textViewDuration);
+        }
+
+        void bind(Challenge challenge) {
+            textViewChallengeTitle.setText(challenge.getTitle());
+        }
+    }
+}

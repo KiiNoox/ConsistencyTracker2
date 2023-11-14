@@ -19,6 +19,11 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
+        <activity
+            android:name=".UpdateChallengeActivity"
+            android:label="Update Challenge Activity"
+            android:parentActivityName=".ChallengeListActivity">
+        </activity>
     </application>
 
 </manifest>
