@@ -1,5 +1,6 @@
 package com.example.consistencytracker.Adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,26 +14,35 @@ import com.example.consistencytracker.R;
 
 import java.util.List;
 
-public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.ViewHolder> {
+public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.ChallengeViewHolder> {
     private List<Challenge> challenges;
+    private OnChallengeLongClickListener longClickListener;
 
-    public ChallengeAdapter(List<Challenge> challenges) {
+    public interface OnChallengeLongClickListener {
+        void onChallengeLongClick(Challenge challenge);
+    }
+    public ChallengeAdapter(List<Challenge> challenges, OnChallengeLongClickListener longClickListener) {
         this.challenges = challenges;
+        this.longClickListener = longClickListener;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_challenge, parent, false);
-        return new ViewHolder(view);
+    public ChallengeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View challengeView = inflater.inflate(R.layout.item_challenge, parent, false);
+        return new ChallengeViewHolder(challengeView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ChallengeViewHolder holder, int position) {
         Challenge challenge = challenges.get(position);
-        holder.titleTextView.setText(challenge.getTitle());
+        holder.bind(challenge);
+        holder.textViewChallengeTitle.setText(challenge.getTitle());
         holder.descriptionTextView.setText(challenge.getDescription());
         holder.durationTextView.setText("Duration: " + challenge.getDuration() + " days");
+
     }
 
     @Override
@@ -40,21 +50,46 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.View
         return challenges.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView titleTextView;
-        TextView descriptionTextView;
-        TextView durationTextView;
 
-        ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            titleTextView = itemView.findViewById(R.id.textViewTitle);
-            descriptionTextView = itemView.findViewById(R.id.textViewDescription);
-            durationTextView = itemView.findViewById(R.id.textViewDuration);
-        }
-    }
     public void setChallenges(List<Challenge> newChallenges) {
         challenges = newChallenges;
         notifyDataSetChanged(); // Notify the adapter that the dataset has changed
+    }
+    class ChallengeViewHolder extends RecyclerView.ViewHolder {
+        private TextView textViewChallengeTitle;
+        TextView descriptionTextView;
+        TextView durationTextView;
+
+
+        ChallengeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewChallengeTitle = itemView.findViewById(R.id.textViewTitle);
+            descriptionTextView = itemView.findViewById(R.id.textViewDescription);
+            durationTextView = itemView.findViewById(R.id.textViewDuration);
+
+            // Set a long click listener on the item view
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Challenge challenge = challenges.get(position);
+                    if (longClickListener != null) {
+                        longClickListener.onChallengeLongClick(challenge);
+                    }
+                    return true; // Consume the long click event
+                }
+                return false;
+            });
+        }
+    void bind(Challenge challenge) {
+        textViewChallengeTitle.setText(challenge.getTitle());
+    }
+}
+    public void removeChallenge(Challenge challenge) {
+        int position = challenges.indexOf(challenge);
+        if (position != -1) {
+            challenges.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 }
 

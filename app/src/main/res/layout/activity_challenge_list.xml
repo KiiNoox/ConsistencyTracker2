@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_gradient">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,16 +16,20 @@
             android:layout_height="wrap_content"
             android:paddingVertical="20dp"
             android:hint="Challenge Name"
-            android:inputType="text" />
+            android:inputType="text"
+            android:gravity="center_horizontal"
+            android:background="@drawable/edittext_background"/>
 
         <EditText
-            android:id="@+id/adddescription"
+            android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingVertical="20dp"
             android:hint="Description"
-            android:gravity="top"
+            android:gravity="center_horizontal"
             android:inputType="text"
+            android:background="@drawable/edittext_background"
+
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:paddingTop="10dp"
+
+                android:layout_gravity="center"
                 android:text="Pick the number of days" />
 
             <NumberPicker
@@ -46,6 +52,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:value="7"
+                android:background="@drawable/edittext_background"
                 />
         </LinearLayout>
 

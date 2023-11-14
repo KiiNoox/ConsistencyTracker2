@@ -76,11 +76,13 @@ public class ChallengeDataSource {
         );
     }
 
-    public void deleteChallenge(long challengeId) {
-        database.delete(
+    public boolean deleteChallenge(long challengeId) {
+        int rowsAffected = database.delete(
                 ChallengeContract.ChallengeEntry.TABLE_NAME,
                 ChallengeContract.ChallengeEntry._ID + " = ?",
                 new String[]{String.valueOf(challengeId)}
         );
+
+        return rowsAffected > 0;
     }
 }
